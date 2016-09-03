@@ -7,12 +7,29 @@ namespace TestEnvironment.Tests.Component.Environment
     {
         #region Private Fields
 
-        private bool disposedValue = false;
-        private TestingEnvironmentSteps steps = new TestingEnvironmentSteps();
+        private readonly TestingEnvironmentSteps steps;
+        private bool disposedValue;
 
         #endregion Private Fields
 
+        #region Public Constructors
+
+        public TestingEnvironmentFeatures()
+        {
+            this.steps = new TestingEnvironmentSteps();
+        }
+
+        #endregion Public Constructors
+
         #region Public Methods
+
+        [Fact]
+        public void CanAddMongo()
+        {
+            this.steps.GivenIHaveATestingEnvironment();
+            this.steps.WhenIAddMongo();
+            this.steps.ThenICanVerifyICanAddMongo();
+        }
 
         [Fact]
         public void CanAddSqlContext()
@@ -23,13 +40,23 @@ namespace TestEnvironment.Tests.Component.Environment
         }
 
         [Fact]
-        public void CanCreateAndReadSqlData()
+        public void CanCreateAndReadMongoData()
         {
             this.steps.GivenIHaveATestingEnvironment();
             this.steps.GivenIHaveDataToCreate();
-            this.steps.WhenIAddASqlContext();
-            this.steps.WhenICreateSqlData();
-            this.steps.ThenICanVerifyICanCreateAndReadSqlData();
+            this.steps.WhenIAddMongo();
+            this.steps.WhenICreateMongoData();
+            this.steps.ThenICanVerifyICanCreateAndReadMongoData();
+        }
+
+        [Fact]
+        public void CanCreateAndReadMultipleMongoData()
+        {
+            this.steps.GivenIHaveATestingEnvironment();
+            this.steps.GivenIHaveMultipleDataToCreate();
+            this.steps.WhenIAddMongo();
+            this.steps.WhenICreateMultipleMongoData();
+            this.steps.ThenICanVerifyICanCreateAndReadMultipleMongoData();
         }
 
         [Fact]
@@ -40,6 +67,16 @@ namespace TestEnvironment.Tests.Component.Environment
             this.steps.WhenIAddASqlContext();
             this.steps.WhenICreateMultipleSqlData();
             this.steps.ThenICanVerifyICanCreateAndReadMultipleSqlData();
+        }
+
+        [Fact]
+        public void CanCreateAndReadSqlData()
+        {
+            this.steps.GivenIHaveATestingEnvironment();
+            this.steps.GivenIHaveDataToCreate();
+            this.steps.WhenIAddASqlContext();
+            this.steps.WhenICreateSqlData();
+            this.steps.ThenICanVerifyICanCreateAndReadSqlData();
         }
 
         public void Dispose()
@@ -54,9 +91,9 @@ namespace TestEnvironment.Tests.Component.Environment
 
         protected virtual void Dispose(bool disposing)
         {
-            if(!disposedValue)
+            if (!disposedValue)
             {
-                if(disposing)
+                if (disposing)
                 {
                     this.steps?.Dispose();
                 }

@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "TestEnvironment",
   "version": "1.0.0-*",
   "description": "This library contains everything needed for testing",
@@ -9,7 +9,14 @@
   "dependencies": {
     "Microsoft.EntityFrameworkCore": "1.0.0",
     "Microsoft.EntityFrameworkCore.InMemory": "1.0.0",
-    "NETStandard.Library": "1.6.0"
+    "NETStandard.Library": "1.6.0",
+    "System.Security.SecureString": "4.0.0-beta-23123",
+    "System.Collections": "4.0.11",
+    "System.Collections.NonGeneric": "4.0.1",
+    "System.Collections.Specialized": "4.0.1",
+    "System.Diagnostics.Process": "4.1.0",
+    "MongoDB.Driver": "2.3.0-beta1",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0"
   },
   "frameworks": {
     "netstandard1.6": {

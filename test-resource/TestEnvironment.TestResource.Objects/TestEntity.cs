@@ -11,7 +11,7 @@ namespace TestEnvironment.TestResource.Objects
     public class TestEntity
     {
         [Key, Column("Key")]
-        public int Key { get; set; }
+        public int Id { get; set; }
 
         [Column("Value")]
         public string Value { get; set; }
