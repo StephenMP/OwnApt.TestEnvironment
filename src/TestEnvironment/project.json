@@ -1,13 +1,25 @@
 ﻿{
+  "name": "TestEnvironment",
   "version": "1.0.0-*",
+  "description": "This library contains everything needed for testing",
+  "copyright": "OwnApt, LLC",
+  "authors": [ "OwnApt, LLC" ],
+  "language": "en-US",
 
   "dependencies": {
+    "Microsoft.EntityFrameworkCore": "1.0.0",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.0.0",
     "NETStandard.Library": "1.6.0"
   },
-
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50"
     }
+  },
+  "buildOptions": {
+    "warningsAsErrors": true,
+    "optimize": true,
+    "platform": "x64",
+    "languageVersion": "csharp6"
   }
 }
