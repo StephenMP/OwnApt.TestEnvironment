@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace TestEnvironment.Tests.Component.Environment
@@ -40,6 +41,14 @@ namespace TestEnvironment.Tests.Component.Environment
         }
 
         [Fact]
+        public void CanAddWebService()
+        {
+            this.steps.GivenIHaveATestingEnvironment();
+            this.steps.WhenIAddAWebService();
+            this.steps.ThenICanVerifyICanAddWebService();
+        }
+
+        [Fact]
         public void CanCreateAndReadMongoData()
         {
             this.steps.GivenIHaveATestingEnvironment();
@@ -77,6 +86,15 @@ namespace TestEnvironment.Tests.Component.Environment
             this.steps.WhenIAddASqlContext();
             this.steps.WhenICreateSqlData();
             this.steps.ThenICanVerifyICanCreateAndReadSqlData();
+        }
+
+        [Fact]
+        public async Task CanInteractWithWebServiceAsync()
+        {
+            this.steps.GivenIHaveATestingEnvironment();
+            this.steps.WhenIAddAWebService();
+            await this.steps.WhenIUseWebServiceAsync();
+            await this.steps.ThenICanVerifyIReceivedAResultAsync();
         }
 
         public void Dispose()

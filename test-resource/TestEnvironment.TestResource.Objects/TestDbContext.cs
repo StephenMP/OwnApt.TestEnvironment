@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace TestEnvironment.TestResource.Objects
 {
     public class TestDbContext : DbContext
     {
-        public TestDbContext(DbContextOptions<TestDbContext> contextOptions) : base(contextOptions) { }
+        #region Public Constructors
+
+        public TestDbContext(DbContextOptions<TestDbContext> contextOptions) : base(contextOptions)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public DbSet<TestEntity> Test { get; set; }
+
+        #endregion Public Properties
     }
 }

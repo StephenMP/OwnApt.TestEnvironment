@@ -2,9 +2,16 @@
 {
     internal interface IFileSystem
     {
+        #region Public Methods
+
         string CreateTempFolder();
-        bool FileExists(string path);
-        bool DirectoryExists(string path);
+
         void DeleteDirectory(string path, bool recursive);
+
+        bool DirectoryExists(string path);
+
+        bool FileExists(string path);
+
+        #endregion Public Methods
     }
 }

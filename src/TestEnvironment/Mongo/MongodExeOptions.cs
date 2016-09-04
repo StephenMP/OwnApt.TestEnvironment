@@ -1,11 +1,15 @@
-﻿using System;
-
-namespace OwnApt.TestEnvironment.Mongo
+﻿namespace OwnApt.TestEnvironment.Mongo
 {
     public class MongodOptions
     {
-        private readonly int port;
+        #region Private Fields
+
         private readonly string dbPath;
+        private readonly int port;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public MongodOptions(int port, string dbPath)
         {
@@ -13,9 +17,15 @@ namespace OwnApt.TestEnvironment.Mongo
             this.dbPath = dbPath;
         }
 
+        #endregion Public Constructors
+
+        #region Public Methods
+
         public override string ToString()
         {
             return $"--port {this.port} --dbpath {this.dbPath}";
         }
+
+        #endregion Public Methods
     }
 }

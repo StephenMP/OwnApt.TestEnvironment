@@ -5,6 +5,8 @@ namespace OwnApt.TestEnvironment.Mongo.File
 {
     internal class FileSystem : IFileSystem
     {
+        #region Public Methods
+
         public string CreateTempFolder()
         {
             var tempFolderPath = Path.Combine(Path.GetTempPath(), "OwnApt\\Mongo");
@@ -14,9 +16,9 @@ namespace OwnApt.TestEnvironment.Mongo.File
             return dbPath;
         }
 
-        public bool FileExists(string path)
+        public void DeleteDirectory(string path, bool recursive)
         {
-            return System.IO.File.Exists(path);
+            Directory.Delete(path, recursive);
         }
 
         public bool DirectoryExists(string path)
@@ -24,9 +26,11 @@ namespace OwnApt.TestEnvironment.Mongo.File
             return Directory.Exists(path);
         }
 
-        public void DeleteDirectory(string path, bool recursive)
+        public bool FileExists(string path)
         {
-            Directory.Delete(path, recursive);
+            return System.IO.File.Exists(path);
         }
+
+        #endregion Public Methods
     }
 }

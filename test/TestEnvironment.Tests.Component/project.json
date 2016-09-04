@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "testRunner": "xunit",
   "dependencies": {
@@ -7,7 +7,8 @@
     "moq.netcore": "4.4.0-beta8",
     "TestEnvironment": "1.0.0-*",
     "TestEnvironment.TestResource.Objects": "1.0.0-*",
-    "MongoDB.Driver": "2.3.0-beta1"
+    "MongoDB.Driver": "2.3.0-beta1",
+    "TestEnvironment.TestResource.Api": "1.0.0-*"
   },
   "frameworks": {
     "netcoreapp1.0": {

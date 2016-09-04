@@ -1,14 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using OwnApt.TestEnvironment.Mongo;
-using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Collections.Generic;
-using MongoDB.Driver;
 using Microsoft.Extensions.PlatformAbstractions;
+using MongoDB.Driver;
+using OwnApt.TestEnvironment.Mongo;
+using OwnApt.TestEnvironment.WebService;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace OwnApt.TestEnvironment.Environment
 {
@@ -16,7 +15,12 @@ namespace OwnApt.TestEnvironment.Environment
     {
         #region Private Fields
 
-        private IServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
+        private readonly Dictionary<Type, IDbContextOptions> sqlDbContextOptions;
+        private readonly Dictionary<Type, TestWebService> webServices;
+        private bool disposedValue;
+        private IMongoClient mongoClient;
+        private MongoTestServer mongoServer;
 
         #endregion Private Fields
 
@@ -24,7 +28,8 @@ namespace OwnApt.TestEnvironment.Environment
 
         public TestingEnvironment()
         {
-            this.sqlDbContextOptions = new Dictionary<Type, DbContextOptions>();
+            this.sqlDbContextOptions = new Dictionary<Type, IDbContextOptions>();
+            this.webServices = new Dictionary<Type, TestWebService>();
             this.serviceProvider = new ServiceCollection()
                  .AddEntityFrameworkInMemoryDatabase()
                  .BuildServiceProvider();
@@ -32,24 +37,7 @@ namespace OwnApt.TestEnvironment.Environment
 
         #endregion Public Constructors
 
-        #region Public Properties
-
-        private Dictionary<Type, DbContextOptions> sqlDbContextOptions;
-        private MongoTestServer mongoServer;
-        private IMongoClient mongoClient;
-
-        #endregion Public Properties
-
         #region Public Methods
-
-        public void AddSqlContext<TDbContext>() where TDbContext : DbContext
-        {
-            var builder = new DbContextOptionsBuilder<TDbContext>()
-                                .UseInMemoryDatabase()
-                                .UseInternalServiceProvider(serviceProvider);
-
-            this.sqlDbContextOptions.Add(typeof(TDbContext), builder.Options);
-        }
 
         public void AddMongo()
         {
@@ -60,7 +48,7 @@ namespace OwnApt.TestEnvironment.Environment
                 mongoPath = Path.GetFullPath(Path.Combine(mongoPath, @"..\"));
                 var dirs = Directory.GetDirectories(mongoPath);
 
-                foreach(var dir in dirs)
+                foreach (var dir in dirs)
                 {
                     if (dir.Contains("DevOps"))
                     {
@@ -70,13 +58,29 @@ namespace OwnApt.TestEnvironment.Environment
                 }
             }
 
-            this.mongoServer = new MongoTestServer(TcpPort.GetFreeTcpPort(), Path.Combine(mongoPath, "DevOps\\Mongo\\bin\\mongod.exe"));
+            this.mongoServer = new MongoTestServer(TcpPortUtil.GetFreeTcpPort(), Path.Combine(mongoPath, "DevOps\\Mongo\\bin\\mongod.exe"));
             this.mongoClient = mongoServer.Database.Client;
         }
 
-        public DbContextOptions<TDbContext> SqlDbContextOptions<TDbContext>() where TDbContext : DbContext
+        public void AddSqlContext<TDbContext>() where TDbContext : DbContext
         {
-            return this.sqlDbContextOptions[typeof(TDbContext)] as DbContextOptions<TDbContext>;
+            var builder = new DbContextOptionsBuilder<TDbContext>()
+                                .UseInMemoryDatabase()
+                                .UseInternalServiceProvider(serviceProvider);
+
+            this.sqlDbContextOptions.Add(typeof(TDbContext), builder.Options);
+        }
+
+        public void AddWebService<TStartup>() where TStartup : class
+        {
+            var baseUri = new Uri($"http://localhost:{TcpPortUtil.GetFreeTcpPort()}");
+            this.webServices.Add(typeof(TStartup), TestWebService.Create<TStartup>(baseUri));
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public IMongoClient MongoClient()
@@ -84,8 +88,19 @@ namespace OwnApt.TestEnvironment.Environment
             return this.mongoClient;
         }
 
-        #region IDisposable Support
-        private bool disposedValue;
+        public DbContextOptions<TDbContext> SqlDbContextOptions<TDbContext>() where TDbContext : DbContext
+        {
+            return this.sqlDbContextOptions[typeof(TDbContext)] as DbContextOptions<TDbContext>;
+        }
+
+        public TestWebService WebService<TStartup>() where TStartup : class
+        {
+            return this.webServices[typeof(TStartup)];
+        }
+
+        #endregion Public Methods
+
+        #region Protected Methods
 
         protected virtual void Dispose(bool disposing)
         {
@@ -94,19 +109,16 @@ namespace OwnApt.TestEnvironment.Environment
                 if (disposing)
                 {
                     this.mongoServer?.Dispose();
+                    foreach (var webHost in this.webServices.Values)
+                    {
+                        webHost?.Dispose();
+                    }
                 }
 
                 disposedValue = true;
             }
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
-
-        #endregion Public Methods
+        #endregion Protected Methods
     }
 }

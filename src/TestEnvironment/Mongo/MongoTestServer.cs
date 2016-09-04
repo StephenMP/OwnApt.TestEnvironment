@@ -9,16 +9,16 @@ namespace OwnApt.TestEnvironment.Mongo
     {
         #region Private Fields
 
-        private readonly string mongoDatabasePath;
         private readonly IFileSystem fileSystem;
+        private readonly string mongoDatabasePath;
+        private readonly MongodExeFacade mongoFacade;
         private readonly IProcess process;
         private readonly IMongoTestDatabase testDatabase;
         private bool disposedValue;
-        private readonly MongodExeFacade mongoFacade;
 
         #endregion Private Fields
 
-        #region Internal Constructors
+        #region Public Constructors
 
         public MongoTestServer(int port, string mongoExeLocation)
         {
@@ -29,7 +29,7 @@ namespace OwnApt.TestEnvironment.Mongo
             this.process = mongoFacade.Start(new MongodOptions(port, mongoDatabasePath));
         }
 
-        #endregion Internal Constructors
+        #endregion Public Constructors
 
         #region Public Properties
 
