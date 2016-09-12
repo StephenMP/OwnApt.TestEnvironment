@@ -58,7 +58,7 @@ namespace OwnApt.TestEnvironment.Environment
                 }
             }
 
-            this.mongoServer = new MongoTestServer(TcpPortUtil.GetFreeTcpPort(), Path.Combine(mongoPath, "DevOps\\Mongo\\bin\\mongod.exe"));
+            this.mongoServer = new MongoTestServer(TcpPortUtil.GetFreeTcpPort(), Path.Combine(mongoPath, "DevOps\\BuildSystem\\Mongo\\bin\\mongod.exe"));
             this.mongoClient = mongoServer.Database.Client;
         }
 
