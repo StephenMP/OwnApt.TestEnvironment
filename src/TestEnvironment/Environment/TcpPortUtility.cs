@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace OwnApt.TestEnvironment.Environment
 {
-    public static class TcpPortUtil
+    public static class TcpPortUtility
     {
         #region Public Methods
 

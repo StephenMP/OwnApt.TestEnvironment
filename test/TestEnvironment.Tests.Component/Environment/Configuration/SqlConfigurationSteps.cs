@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TestEnvironment.TestResource.Objects;
 using Xunit;
 
-namespace TestEnvironment.Tests.Component.Environment
+namespace TestEnvironment.Tests.Component.Environment.Configuration
 {
     public class SqlConfigurationSteps
     {
@@ -101,7 +101,7 @@ namespace TestEnvironment.Tests.Component.Environment
 
         internal async Task WhenIImportSqlDataAsync()
         {
-            await this.sqlConfiguration.ImportSqlDataAsync<TestDbContext, TestEntity>(this.testEntities);
+            await this.sqlConfiguration.ImportDataAsync<TestDbContext, TestEntity>(this.testEntities);
         }
 
         internal void WhenIRetrieveADbContext()

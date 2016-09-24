@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TestEnvironment.TestResource.Api;
 using Xunit;
 
-namespace TestEnvironment.Tests.Component.Environment
+namespace TestEnvironment.Tests.Component.Environment.Configuration
 {
     public class ResourceWebServiceConfigurationSteps : IDisposable
     {

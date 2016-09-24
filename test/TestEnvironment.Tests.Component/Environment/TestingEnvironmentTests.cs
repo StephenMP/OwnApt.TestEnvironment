@@ -21,18 +21,19 @@ namespace TestEnvironment.Tests.Component.Environment
         [Fact]
         public void CanNewUpTestingEnvironment()
         {
-            this.testEnvironment = OwnAptTestEnvironment.CreateEnvironment();
+            var options = new OwnAptTestEnvironmentBuilder();
+            this.testEnvironment = options.BuildEnvironment();
             Assert.NotNull(testEnvironment);
         }
 
         [Fact]
         public void CanNewUpTestingEnvironmentUsingChaining()
         {
-            this.testEnvironment = OwnAptTestEnvironment
-                                        .CreateEnvironment()
-                                        .UseMongo()
-                                        .UseSql<TestDbContext>()
-                                        .UseResourceWebService<TestStartup>();
+            this.testEnvironment = new OwnAptTestEnvironmentBuilder()
+                                        .AddMongo()
+                                        .AddSqlContext<TestDbContext>()
+                                        .AddResourceWebService<TestStartup>()
+                                        .BuildEnvironment();
 
             Assert.NotNull(this.testEnvironment);
 

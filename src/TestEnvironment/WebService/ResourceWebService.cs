@@ -3,7 +3,7 @@ using System;
 
 namespace OwnApt.TestEnvironment.WebService
 {
-    public class TestWebService : IDisposable
+    public class ResourceWebService : IDisposable
     {
         #region Private Fields
 
@@ -14,7 +14,7 @@ namespace OwnApt.TestEnvironment.WebService
 
         #region Internal Constructors
 
-        internal TestWebService(Uri baseUri, IWebHost webHost)
+        internal ResourceWebService(Uri baseUri, IWebHost webHost)
         {
             this.BaseUri = baseUri;
             this.webHost = webHost;
@@ -30,10 +30,10 @@ namespace OwnApt.TestEnvironment.WebService
 
         #region Public Methods
 
-        public static TestWebService Create<TStartup>(Uri baseUri) where TStartup : class
+        public static ResourceWebService Create<TStartup>(Uri baseUri) where TStartup : class
         {
             var webHost = new WebHostBuilder().UseKestrel().UseStartup<TStartup>().UseUrls().Start(baseUri.AbsoluteUri);
-            return new TestWebService(baseUri, webHost);
+            return new ResourceWebService(baseUri, webHost);
         }
 
         public void Dispose()

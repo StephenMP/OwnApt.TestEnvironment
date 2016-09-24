@@ -8,7 +8,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
     {
         #region Private Fields
 
-        private readonly Dictionary<Type, TestWebService> webServices;
+        private readonly Dictionary<Type, ResourceWebService> webServices;
 
         private bool disposedValue;
 
@@ -18,7 +18,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
 
         public ResourceWebServiceConfiguration()
         {
-            this.webServices = new Dictionary<Type, TestWebService>();
+            this.webServices = new Dictionary<Type, ResourceWebService>();
         }
 
         #endregion Public Constructors
@@ -27,8 +27,8 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
 
         public void AddWebService<TStartup>() where TStartup : class
         {
-            var baseUri = new Uri($"http://localhost:{TcpPortUtil.GetFreeTcpPort()}");
-            this.webServices.Add(typeof(TStartup), TestWebService.Create<TStartup>(baseUri));
+            var baseUri = new Uri($"http://localhost:{TcpPortUtility.GetFreeTcpPort()}");
+            this.webServices.Add(typeof(TStartup), ResourceWebService.Create<TStartup>(baseUri));
         }
 
         public void Dispose()
@@ -37,7 +37,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
             GC.SuppressFinalize(this);
         }
 
-        public TestWebService WebService<TStartup>() where TStartup : class
+        public ResourceWebService WebService<TStartup>() where TStartup : class
         {
             return this.webServices[typeof(TStartup)];
         }

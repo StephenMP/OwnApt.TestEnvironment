@@ -39,7 +39,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
             this.sqlDbContextOptions.Add(typeof(TDbContext), builder.Options);
         }
 
-        public async Task ImportSqlDataAsync<TDbContext, TEntity>(IEnumerable<TEntity> entity) where TDbContext : DbContext where TEntity : class
+        public async Task ImportDataAsync<TDbContext, TEntity>(IEnumerable<TEntity> entity) where TDbContext : DbContext where TEntity : class
         {
             using (var context = (TDbContext)Activator.CreateInstance(typeof(TDbContext), this.SqlDbContextOptions<TDbContext>()))
             {

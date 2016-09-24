@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Xunit;
 
-namespace TestEnvironment.Tests.Component.Environment
+namespace TestEnvironment.Tests.Component.Environment.Configuration
 {
     public class SqlConfigurationFeatures
     {

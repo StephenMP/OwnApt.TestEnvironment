@@ -38,7 +38,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
                 }
             }
 
-            this.mongoServer = new MongoTestServer(TcpPortUtil.GetFreeTcpPort(), Path.Combine(mongoPath, "DevOps\\BuildSystem\\Mongo\\bin\\mongod.exe"));
+            this.mongoServer = new MongoTestServer(TcpPortUtility.GetFreeTcpPort(), Path.Combine(mongoPath, "DevOps\\BuildSystem\\Mongo\\bin\\mongod.exe"));
             this.MongoClient = mongoServer.Database.Client;
         }
 
@@ -58,7 +58,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
             GC.SuppressFinalize(this);
         }
 
-        public async Task ImportMongoDataAsync<TEntity>(string dbName, string collectionName, IEnumerable<TEntity> data)
+        public async Task ImportDataAsync<TEntity>(string dbName, string collectionName, IEnumerable<TEntity> data)
         {
             await this.MongoClient.GetDatabase(dbName).GetCollection<TEntity>(collectionName).InsertManyAsync(data);
         }

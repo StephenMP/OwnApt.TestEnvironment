@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
-using OwnApt.TestEnvironment.Environment.Configuration;
 using OwnApt.TestEnvironment.WebService;
 using System;
 using System.Collections.Generic;
@@ -12,24 +11,21 @@ namespace OwnApt.TestEnvironment.Environment
     {
         #region Private Fields
 
+        private readonly OwnAptTestEnvironmentBuilder options;
         private bool disposedValue;
-        private MongoConfiguration mongoConfiguration;
-        private ResourceWebServiceConfiguration resourceWebServiceConfiguration;
-        private SqlConfiguration sqlConfiguration;
 
         #endregion Private Fields
 
-        #region Private Constructors
+        #region Public Constructors
 
-        private OwnAptTestEnvironment()
+        public OwnAptTestEnvironment(OwnAptTestEnvironmentBuilder options)
         {
+            this.options = options;
         }
 
-        #endregion Private Constructors
+        #endregion Public Constructors
 
         #region Public Methods
-
-        public static OwnAptTestEnvironment CreateEnvironment() => new OwnAptTestEnvironment();
 
         public void Dispose()
         {
@@ -39,47 +35,27 @@ namespace OwnApt.TestEnvironment.Environment
 
         public IMongoClient GetMongoClient()
         {
-            return this.mongoConfiguration?.MongoClient;
+            return this.options.MongoConfiguration?.MongoClient;
         }
 
-        public TestWebService GetResourceWebService<TStartup>() where TStartup : class
+        public ResourceWebService GetResourceWebService<TStartup>() where TStartup : class
         {
-            return this.resourceWebServiceConfiguration?.WebService<TStartup>();
+            return this.options.ResourceWebServiceConfiguration?.WebService<TStartup>();
         }
 
         public DbContextOptions<TDbContext> GetSqlDbContextOptions<TDbContext>() where TDbContext : DbContext
         {
-            return this.sqlConfiguration?.SqlDbContextOptions<TDbContext>();
+            return this.options.SqlConfiguration?.SqlDbContextOptions<TDbContext>();
         }
 
         public async Task ImportMongoDataAsync<TEntity>(string dbName, string collectionName, IEnumerable<TEntity> data)
         {
-            await this.mongoConfiguration.ImportMongoDataAsync(dbName, collectionName, data);
+            await this.options?.MongoConfiguration?.ImportDataAsync(dbName, collectionName, data);
         }
 
         public async Task ImportSqlDataAsync<TDbContext, TEntity>(IEnumerable<TEntity> entities) where TDbContext : DbContext where TEntity : class
         {
-            await this.sqlConfiguration.ImportSqlDataAsync<TDbContext, TEntity>(entities);
-        }
-
-        public OwnAptTestEnvironment UseMongo()
-        {
-            this.mongoConfiguration = new MongoConfiguration();
-            return this;
-        }
-
-        public OwnAptTestEnvironment UseResourceWebService<TStartup>() where TStartup : class
-        {
-            this.resourceWebServiceConfiguration = this.resourceWebServiceConfiguration ?? new ResourceWebServiceConfiguration();
-            this.resourceWebServiceConfiguration.AddWebService<TStartup>();
-            return this;
-        }
-
-        public OwnAptTestEnvironment UseSql<TDbContext>() where TDbContext : DbContext
-        {
-            this.sqlConfiguration = new SqlConfiguration();
-            this.sqlConfiguration.AddSqlContext<TDbContext>();
-            return this;
+            await this.options?.SqlConfiguration?.ImportDataAsync<TDbContext, TEntity>(entities);
         }
 
         #endregion Public Methods
@@ -92,8 +68,7 @@ namespace OwnApt.TestEnvironment.Environment
             {
                 if (disposing)
                 {
-                    this.mongoConfiguration?.Dispose();
-                    this.resourceWebServiceConfiguration?.Dispose();
+                    this.options?.Dispose();
                 }
 
                 disposedValue = true;

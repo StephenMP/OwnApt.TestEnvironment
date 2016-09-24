@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TestEnvironment.TestResource.Objects;
 using Xunit;
 
-namespace TestEnvironment.Tests.Component.Environment
+namespace TestEnvironment.Tests.Component.Environment.Configuration
 {
     public class MongoConfigurationSteps : IDisposable
     {
@@ -93,7 +93,7 @@ namespace TestEnvironment.Tests.Component.Environment
 
         internal async Task WhenIImportMongoDataAsync()
         {
-            await this.mongoConfiguration.ImportMongoDataAsync(DbName, CollectionName, this.testEntities);
+            await this.mongoConfiguration.ImportDataAsync(DbName, CollectionName, this.testEntities);
         }
 
         #endregion Internal Methods
