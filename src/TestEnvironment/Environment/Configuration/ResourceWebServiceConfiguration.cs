@@ -8,7 +8,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
     {
         #region Private Fields
 
-        private readonly Dictionary<Type, ResourceWebService> webServices;
+        private readonly Dictionary<Type, IResourceWebService> webServices;
 
         private bool disposedValue;
 
@@ -18,7 +18,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
 
         public ResourceWebServiceConfiguration()
         {
-            this.webServices = new Dictionary<Type, ResourceWebService>();
+            this.webServices = new Dictionary<Type, IResourceWebService>();
         }
 
         #endregion Public Constructors
@@ -37,7 +37,7 @@ namespace OwnApt.TestEnvironment.Environment.Configuration
             GC.SuppressFinalize(this);
         }
 
-        public ResourceWebService WebService<TStartup>() where TStartup : class
+        public IResourceWebService WebService<TStartup>() where TStartup : class
         {
             return this.webServices[typeof(TStartup)];
         }

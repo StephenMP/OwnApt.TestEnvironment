@@ -11,16 +11,16 @@ namespace OwnApt.TestEnvironment.Environment
     {
         #region Private Fields
 
-        private readonly OwnAptTestEnvironmentBuilder options;
+        private readonly OwnAptTestEnvironmentBuilder ownaptTestEnvironmentBuilder;
         private bool disposedValue;
 
         #endregion Private Fields
 
         #region Public Constructors
 
-        public OwnAptTestEnvironment(OwnAptTestEnvironmentBuilder options)
+        public OwnAptTestEnvironment(OwnAptTestEnvironmentBuilder ownaptTestEnvironmentBuilder)
         {
-            this.options = options;
+            this.ownaptTestEnvironmentBuilder = ownaptTestEnvironmentBuilder;
         }
 
         #endregion Public Constructors
@@ -35,27 +35,27 @@ namespace OwnApt.TestEnvironment.Environment
 
         public IMongoClient GetMongoClient()
         {
-            return this.options.MongoConfiguration?.MongoClient;
+            return this.ownaptTestEnvironmentBuilder?.GetMongoClient();
         }
 
-        public ResourceWebService GetResourceWebService<TStartup>() where TStartup : class
+        public IResourceWebService GetResourceWebService<TStartup>() where TStartup : class
         {
-            return this.options.ResourceWebServiceConfiguration?.WebService<TStartup>();
+            return this.ownaptTestEnvironmentBuilder?.GetResourceWebService<TStartup>();
         }
 
         public DbContextOptions<TDbContext> GetSqlDbContextOptions<TDbContext>() where TDbContext : DbContext
         {
-            return this.options.SqlConfiguration?.SqlDbContextOptions<TDbContext>();
+            return this.ownaptTestEnvironmentBuilder?.GetSqlDbContextOptions<TDbContext>();
         }
 
         public async Task ImportMongoDataAsync<TEntity>(string dbName, string collectionName, IEnumerable<TEntity> data)
         {
-            await this.options?.MongoConfiguration?.ImportDataAsync(dbName, collectionName, data);
+            await this.ownaptTestEnvironmentBuilder?.ImportMongoDataAsync(dbName, collectionName, data);
         }
 
         public async Task ImportSqlDataAsync<TDbContext, TEntity>(IEnumerable<TEntity> entities) where TDbContext : DbContext where TEntity : class
         {
-            await this.options?.SqlConfiguration?.ImportDataAsync<TDbContext, TEntity>(entities);
+            await this.ownaptTestEnvironmentBuilder?.ImportSqlDataAsync<TDbContext, TEntity>(entities);
         }
 
         #endregion Public Methods
@@ -68,7 +68,7 @@ namespace OwnApt.TestEnvironment.Environment
             {
                 if (disposing)
                 {
-                    this.options?.Dispose();
+                    this.ownaptTestEnvironmentBuilder?.Dispose();
                 }
 
                 disposedValue = true;
