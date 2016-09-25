@@ -4,7 +4,6 @@
   "dependencies": {
     "xunit": "2.2.0-beta2-build3300",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "moq.netcore": "4.4.0-beta8",
     "TestEnvironment": "1.0.0-*",
     "TestEnvironment.TestResource.Objects": "1.0.0-*",
     "MongoDB.Driver": "2.3.0-beta1",
